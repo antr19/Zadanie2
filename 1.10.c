@@ -122,7 +122,7 @@ int main()
             scanf("%s",name);
             Find(l, name);
         }
-        scanf("%c",s[0]);
+        scanf("%s",s[0]);
     }
 
     delete_list(l);
