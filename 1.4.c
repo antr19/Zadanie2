@@ -1,47 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+int main(void)
 {
-    char* s[10];
+    char s[11];
     gets(s);
     int i;
-    i=0;
 
     if((strlen(s)%2)!= 0)
         return -1;
 
-    int n,k;
+    int b, a, len = strlen(s);
 
-    for(n=0;n<(strlen(s));n++)
+    a = 0;
+    b = 0;
+
+    for(i = 0; i < len; i++)
     {
-        k=0;
-        while (i<strlen(s))
-        {
-            //printf("pr2 ");
-            if(((s[i]='(')&&(s[i+1]=')'))||((s[i]='{')&&(s[i+1]='}')))
-            {
-                if(strlen(s)==2)
-                    return 0;
-                //printf("pr3 ");
-                int j;
-                //printf("pr4 ");
-                for (j=0;j<=(strlen(s)-i-1);j++)
-                {
-                    //printf("pr5 ");
-                    s[i+j]=s[i+j+2];
-                }
-                //printf("pr5 ");
-
-                s[strlen(s)-2]="\0";
-
-                k=1;
-            }
-            printf("%s",s);
-            i++;
-        }
-        if(k==0)
+        if (s[i] == '(')
+            a +=1;
+        else if ((s[i] == ')')&&(a>0))
+            a -= 1;
+        else if (s[i] == '{')
+            b +=1;
+        else if ((s[i] == '}')&&(b>0))
+            b -= 1;
+        else
             return -1;
     }
+    if ((a != 0) || (b != 0))
+        return -1;
     return 0;
 }
