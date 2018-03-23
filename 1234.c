@@ -6,13 +6,15 @@ typedef struct tree_element {
 	int value;			// Element value
 	struct tree_element* left;	// Pointer to left subtree
 	struct tree_element* right;
-	struct tree_element* parent;	// Pointer to right subtree
+	struct tree_element* parent;// Pointer to right subtree
+	int h;
 } tree_element;
 
 // Create new element, set its value to 'i', return pointer to new element
 tree_element* create_tree_element(int i){
     tree_element* a = (tree_element*) malloc( sizeof(tree_element));
     a->value = i;
+    a->h = 0;
     a->left = NULL;
     a->right = NULL;
     a->parent = NULL;
@@ -23,7 +25,6 @@ tree_element* create_tree_element(int i){
 /*tree_element* insert_into_tree(tree_element* root, tree_element* elem)
 {
     tree_element* a = root;
-
     if ((elem->value) < (root->value))
         {
             if ((root->left) != NULL)
@@ -44,10 +45,8 @@ tree_element* create_tree_element(int i){
                 return root;
             }
         }
-
     int k;
     k = 0;
-
     while ( k == 0 )
     {
         if ((elem->value) < (a->value))
@@ -77,15 +76,22 @@ tree_element* insert_into_tree(tree_element* root, tree_element* elem)
 {
     if ((elem->value) < (root->value))
         {
+
         if ((root->left) != NULL)
             root->left = insert_into_tree(root -> left, elem);
+            if ((root->right) != NULL)
+                root->h = abs(root->right->h)-abs(root->left->h);
+            else
+                root->h = root->left->h-1
         else
+            root->h -= 1
             root -> left = elem;
             elem -> parent = root;
             return root;
         }
     else
         {
+        root->h += 1;
         if ((root->right) != NULL)
             root->right = insert_into_tree(root->right, elem);
         else
@@ -151,6 +157,35 @@ tree_element* delete_from_tree(tree_element* root, tree_element* elem)
         free(b);
     }
 
+}
+
+tree_element* balance (tree_element* root)
+{
+    if ((abs(root->h) > 1)&&(abs(root->right->h) > 1))
+        root = balance(root->right);
+    else if ((abs(root->h) > 1)&&(abs(root->left->h) > 1))
+        root = balance(root->left);
+    else
+    {
+        tree_element* tree0 = root;
+        tree_element* treeleft = tree0->left;
+        tree_element* treeright = tree0->right;\
+
+        if (root->h > 1)
+        {
+            treeright->parent = tree0->parent;
+            tree0->parent = treeright;
+            tree0->right = treeright -> left;
+            treeright->left = tree0;
+        }
+        if (root->h < -1)
+        {
+            treeleft->parent = NULL;
+            tree0->parent = treeleft;
+            tree0->left = treeleft -> right;
+            treeleft->right = tree0;
+        }
+    }
 }
 
 int main()
